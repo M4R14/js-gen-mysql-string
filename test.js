@@ -42,4 +42,7 @@ test_value_should_be("select * FROM ? ORDER BY ? Without ASC|DESC ", mysql.toSql
 var mysql = new QuryMysql('table_name').insert(['value1', 'value2', 'value3']);
 test_value_should_be("INSERT INTO only data type String", mysql.toSql,"INSERT INTO table_name VALUES ('value1','value2','value3');")
 
+var mysql = new QuryMysql('table_name').insert(['value1', 0, 49]);
+test_value_should_be("INSERT INTO only data type String and number", mysql.toSql,"INSERT INTO table_name VALUES ('value1',0,49);")
+
 console.log("\n",mysql.toSql);
