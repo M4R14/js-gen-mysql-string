@@ -1,4 +1,4 @@
-#todo
+**todo
 - [x] SELECT
 - [ ] SELECT && LIMIT
 - [x] SELECT && WHRER
