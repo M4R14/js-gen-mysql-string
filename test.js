@@ -10,7 +10,7 @@ var mysql = new QuryMysql('dog');
 test_value_should_be("select * some table. ", mysql.toSql, "SELECT * FROM dog;");
 
 var mysql = new QuryMysql('dog').select(['A','B']);
-test_value_should_be("select some colum. ", mysql.toSql , "SELECT A,B FROM dog;"); 
+test_value_should_be("select some column. ", mysql.toSql , "SELECT A,B FROM dog;"); 
 
 var mysql = new QuryMysql('dog').where('A','=',1);
 test_value_should_be("select * where some value. ", mysql.toSql , "SELECT * FROM dog WHERE A = 1;"); 
@@ -28,13 +28,13 @@ var mysql = new QuryMysql('dog').orderBy(['A'],'ASC');
 test_value_should_be("select * FROM ? ORDER BY ?. ", mysql.toSql , "SELECT * FROM dog ORDER BY A ASC;");
 
 var mysql = new QuryMysql('dog').select(['A','B']).where('A','=',1);
-test_value_should_be("select some colum and 1 condition. ", mysql.toSql, "SELECT A,B FROM dog WHERE A = 1;");
+test_value_should_be("select some column and 1 condition. ", mysql.toSql, "SELECT A,B FROM dog WHERE A = 1;");
 
 var mysql = new QuryMysql('dog').select(['A','B']).where('A','=',1).where('B','>',2);
-test_value_should_be("select some colum and 2 condition. ", mysql.toSql , "SELECT A,B FROM dog WHERE A = 1 AND B > 2;");
+test_value_should_be("select some column and 2 condition. ", mysql.toSql , "SELECT A,B FROM dog WHERE A = 1 AND B > 2;");
 
 var mysql = new QuryMysql('dog').select(['A','B']).where('A','=',1).orderBy(['A'],'ASC');
-test_value_should_be("select some colum and 1 condition ORDER  BY ?. ", mysql.toSql, "SELECT A,B FROM dog WHERE A = 1 ORDER BY A ASC;");
+test_value_should_be("select some column and 1 condition ORDER  BY ?. ", mysql.toSql, "SELECT A,B FROM dog WHERE A = 1 ORDER BY A ASC;");
 
 var mysql = new QuryMysql('dog').orderBy(['A']);
 test_value_should_be("select * FROM ? ORDER BY ? Without ASC|DESC ", mysql.toSql, "SELECT * FROM dog ORDER BY A ASC;");

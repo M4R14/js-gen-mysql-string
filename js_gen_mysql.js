@@ -7,15 +7,15 @@ class QuryMysql{
  }
 
  /**
- * @param {array} colums The array
+ * @param {array} columns The array
  */
- select(colums = []){
-    this._colums = colums;
+ select(columns = []){
+    this._columns = columns;
     return this;
  }
 
  /**
- * @param {string} colums The string
+ * @param {string} columns The string
  * @param {string} operator =, <, >, Like
  * @param {string or number} value
  */
@@ -28,29 +28,29 @@ class QuryMysql{
  }
 
  /**
- * @param {list} colums ['user_id','username',['pass']]
+ * @param {list} columns ['user_id','username',['pass']]
  * @param {string} type ASC or DESC
  */
- orderBy(colums = [], type){
+ orderBy(columns = [], type){
     if(!type)
         type = 'ASC';
         
     this._orderBy = {
-        _colums:colums,
+        _columns:columns,
         _type:type
     }
     return this;
  }
 
  get toSql(){
-     if(this._colums && this._where.length > 0 && this._orderBy){
+     if(this._columns && this._where.length > 0 && this._orderBy){
         var select_colum = '';
          var counter = 1;
-         for(var index in this._colums){
-             if(counter == this._colums.length){
-                 select_colum = select_colum + this._colums[index];
+         for(var index in this._columns){
+             if(counter == this._columns.length){
+                 select_colum = select_colum + this._columns[index];
              }else{
-                select_colum = select_colum + this._colums[index] + ",";
+                select_colum = select_colum + this._columns[index] + ",";
              }
              counter++;
          }
@@ -67,30 +67,30 @@ class QuryMysql{
             counter++;
         }
 
-         var colums = this._orderBy._colums;
+         var columns = this._orderBy._columns;
          
-         var orderBy_colums = '';
+         var orderBy_columns = '';
          var counter = 1;
 
-         for (var index in colums) {
-             if(counter == colums.length){
-                orderBy_colums = orderBy_colums + colums[index];
+         for (var index in columns) {
+             if(counter == columns.length){
+                orderBy_columns = orderBy_columns + columns[index];
              }else{
-                orderBy_colums = orderBy_colums + colums[index] +",";                
+                orderBy_columns = orderBy_columns + columns[index] +",";                
              }
          }
 
-        return "SELECT "+ select_colum +" FROM "+ this._table +" "+ where_str +" ORDER BY "+ orderBy_colums +" "+ this._orderBy._type +";";          
+        return "SELECT "+ select_colum +" FROM "+ this._table +" "+ where_str +" ORDER BY "+ orderBy_columns +" "+ this._orderBy._type +";";          
      }
 
-     if(this._colums && this._where.length > 0){
+     if(this._columns && this._where.length > 0){
          var select_colum = '';
          var counter = 1;
-         for(var index in this._colums){
-             if(counter == this._colums.length){
-                 select_colum = select_colum + this._colums[index];
+         for(var index in this._columns){
+             if(counter == this._columns.length){
+                 select_colum = select_colum + this._columns[index];
              }else{
-                select_colum = select_colum + this._colums[index] + ",";
+                select_colum = select_colum + this._columns[index] + ",";
              }
              counter++;
          }
@@ -110,14 +110,14 @@ class QuryMysql{
         return "SELECT "+ select_colum +" FROM "+ this._table +" "+ where_str + ";";
      }
 
-     if(this._colums){
+     if(this._columns){
          var select_colum = '';
          var counter = 1;
-         for(var index in this._colums){
-             if(counter == this._colums.length){
-                 select_colum = select_colum + this._colums[index];
+         for(var index in this._columns){
+             if(counter == this._columns.length){
+                 select_colum = select_colum + this._columns[index];
              }else{
-                select_colum = select_colum + this._colums[index] + ",";
+                select_colum = select_colum + this._columns[index] + ",";
              }
              counter++;
          }
@@ -141,16 +141,16 @@ class QuryMysql{
      }
 
      if(this._orderBy){
-         var colums = this._orderBy._colums;
+         var columns = this._orderBy._columns;
          
          var colum_str = '';
          var counter = 1;
 
-         for (var index in colums) {
-             if(counter == colums.length){
-                colum_str = colum_str + colums[index];
+         for (var index in columns) {
+             if(counter == columns.length){
+                colum_str = colum_str + columns[index];
              }else{
-                colum_str = colum_str + colums[index] +",";                
+                colum_str = colum_str + columns[index] +",";                
              }
          }
         return "SELECT * FROM "+ this._table +" ORDER BY "+ colum_str +" "+ this._orderBy._type +";"; 
