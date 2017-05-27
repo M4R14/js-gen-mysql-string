@@ -6,6 +6,15 @@ class QuryMysql{
     this._where = [];
  }
 
+ insert(data = []){
+    for(var index in data){
+        if(typeof data[index] == "string")
+            data[index] = "'"+ data[index] +"'";
+    }
+    this._insert_data = data
+    return this;
+ }
+
  /**
  * @param {array} columns The array
  */
@@ -43,6 +52,20 @@ class QuryMysql{
  }
 
  get toSql(){
+     if(this._insert_data){
+        var insert_data = this._insert_data;
+        var data = '';
+        var counter = 1;
+        for (var index in insert_data) {
+            if(index == insert_data.length -1){
+                data = data + insert_data[index];
+            }else{
+                data = data + insert_data[index] + ',';
+            }
+        }
+        return "INSERT INTO "+this._table+" VALUES (" + data + ");"
+     }
+
      if(this._columns && this._where.length > 0 && this._orderBy){
         var select_colum = '';
          var counter = 1;

@@ -39,4 +39,7 @@ test_value_should_be("select some column and 1 condition ORDER  BY ?. ", mysql.t
 var mysql = new QuryMysql('dog').orderBy(['A']);
 test_value_should_be("select * FROM ? ORDER BY ? Without ASC|DESC ", mysql.toSql, "SELECT * FROM dog ORDER BY A ASC;");
 
+var mysql = new QuryMysql('table_name').insert(['value1', 'value2', 'value3']);
+test_value_should_be("INSERT INTO only data type String", mysql.toSql,"INSERT INTO table_name VALUES ('value1','value2','value3');")
+
 console.log("\n",mysql.toSql);
