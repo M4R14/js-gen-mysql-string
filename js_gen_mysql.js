@@ -4,6 +4,12 @@ class QuryMysql{
  constructor(tableNname){
     this._table = tableNname ;
     this._where = [];
+    this._delete = false;
+ }
+
+ delete(){
+     this._delete = true;
+     return this;
  }
 
  update(data = {}){
@@ -64,6 +70,22 @@ class QuryMysql{
  }
 
  get toSql(){
+    if(this._delete == true){
+        var where_str = '';
+        var counter = 1;
+        for(var index in this._where){
+            var condition = this._where[index];
+            if(counter == 1){
+                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
+            }else{
+                where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
+            }
+            counter++;
+        }
+
+        return "DELETE FROM "+ this._table +" WHERE "+ where_str +";";
+    }
+
     if(this._updata){
         var data_for_update = this._updata;
         var date_string = '';

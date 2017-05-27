@@ -51,4 +51,7 @@ test_value_should_be(
     mysql.toSql,
     "UPDATE users SET username = 'mark', password = '000000' WHERE user_id = 100;")
 
+var mysql = new QuryMysql('users').where('user_id','=',100).delete();
+test_value_should_be("DELETE WHERE", mysql.toSql,"DELETE FROM users WHERE user_id = 100;")
+
 console.log("\n",mysql.toSql);
