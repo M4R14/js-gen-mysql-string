@@ -6,11 +6,19 @@ class QuryMysql{
     this._where = [];
  }
 
- select(colums){
+ /**
+ * @param {array} colums The array
+ */
+ select(colums = []){
     this._colums = colums;
     return this;
  }
 
+ /**
+ * @param {string} colums The string
+ * @param {string} operator =, <, >, Like
+ * @param {string or number} value
+ */
  where(colum, operator, value){
     if(typeof value == "string")
         value = "'"+ value +"'";
@@ -19,8 +27,11 @@ class QuryMysql{
     return this;
  }
 
- //clomus is Array, type = ASC|DESC 
- orderBy(colums, type){
+ /**
+ * @param {list} colums ['user_id','username',['pass']]
+ * @param {string} type ASC or DESC
+ */
+ orderBy(colums = [], type){
     if(!type)
         type = 'ASC';
         
