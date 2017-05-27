@@ -21,6 +21,9 @@ class QuryMysql{
 
  //clomus is Array, type = ASC|DESC 
  orderBy(colums, type){
+    if(!type)
+        type = 'ASC';
+        
     this._orderBy = {
         _colums:colums,
         _type:type
@@ -28,7 +31,7 @@ class QuryMysql{
     return this;
  }
 
- getQuryString(){
+ get toSql(){
      if(this._colums && this._where.length > 0 && this._orderBy){
         var select_colum = '';
          var counter = 1;
