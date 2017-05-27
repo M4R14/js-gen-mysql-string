@@ -47,11 +47,17 @@ test_value_should_be("INSERT INTO only data type String and number", mysql.toSql
 
 var mysql = new QuryMysql('users').update({username:'mark', password:'000000'}).where('user_id','=',100);
 test_value_should_be(
-    "UPDATE SET WHERE", 
+    "UPDATE SET WHERE data type Json", 
     mysql.toSql,
     "UPDATE users SET username = 'mark', password = '000000' WHERE user_id = 100;")
 
 var mysql = new QuryMysql('users').where('user_id','=',100).delete();
 test_value_should_be("DELETE WHERE", mysql.toSql,"DELETE FROM users WHERE user_id = 100;")
+
+var mysql = new QuryMysql('users').where('user_id','=','UX100').delete();
+test_value_should_be("DELETE WHERE Data type String", mysql.toSql,"DELETE FROM users WHERE user_id = 'UX100';")
+
+var mysql = new QuryMysql('users').where('user_id','=','UX100').where('status','=',100).delete();
+test_value_should_be("DELETE WHERE 2 condition Data type String and number", mysql.toSql,"DELETE FROM users WHERE user_id = 'UX100' AND status = 100;")
 
 console.log("\n",mysql.toSql);

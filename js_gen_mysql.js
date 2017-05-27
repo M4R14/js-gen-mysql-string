@@ -246,4 +246,7 @@ class QuryMysql{
      return "SELECT * FROM "+ this._table +";";
  }
 }
+
+
+
 exports.QuryMysql = QuryMysql;
