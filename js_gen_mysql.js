@@ -6,6 +6,18 @@ class QuryMysql{
     this._where = [];
  }
 
+ update(data = {}){
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            if(typeof data[key] == "string")
+                data[key] = "'"+ data[key] +"'"; 
+        }
+    }
+
+    this._updata = data;
+    return this;
+ }
+
  insert(data = []){
     for(var index in data){
         if(typeof data[index] == "string")
@@ -52,6 +64,36 @@ class QuryMysql{
  }
 
  get toSql(){
+    if(this._updata){
+        var data_for_update = this._updata;
+        var date_string = '';
+        var counter = 1;
+        for (var key in data_for_update) {
+            if (data_for_update.hasOwnProperty(key)) {
+                if(counter == Object.keys(data_for_update).length){
+                    date_string +=  key +" = "+ data_for_update[key];
+                }else{
+                    date_string +=  key +" = "+ data_for_update[key] + ", ";
+                }
+            }
+            counter++;
+        }
+
+        var where_str = '';
+        var counter = 1;
+        for(var index in this._where){
+            var condition = this._where[index];
+            if(counter == 1){
+                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
+            }else{
+                where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
+            }
+            counter++;
+        }
+
+        return "UPDATE "+ this._table +" SET "+ date_string +" WHERE "+ where_str +";"
+    }
+
      if(this._insert_data){
         var insert_data = this._insert_data;
         var data = '';

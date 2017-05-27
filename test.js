@@ -45,4 +45,10 @@ test_value_should_be("INSERT INTO only data type String", mysql.toSql,"INSERT IN
 var mysql = new QuryMysql('table_name').insert(['value1', 0, 49]);
 test_value_should_be("INSERT INTO only data type String and number", mysql.toSql,"INSERT INTO table_name VALUES ('value1',0,49);")
 
+var mysql = new QuryMysql('users').update({username:'mark', password:'000000'}).where('user_id','=',100);
+test_value_should_be(
+    "UPDATE SET WHERE", 
+    mysql.toSql,
+    "UPDATE users SET username = 'mark', password = '000000' WHERE user_id = 100;")
+
 console.log("\n",mysql.toSql);
