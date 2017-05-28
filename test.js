@@ -88,5 +88,11 @@ test_value_should_be("Setect * Where is Null", mysql.toSql, "SELECT * FROM user 
 var mysql = new QuryMysql('user').whereNull('password').whereNull('status').select(['user_id','username']);
 test_value_should_be("Setect columns Where is Null (2 condition)", mysql.toSql, "SELECT user_id,username FROM user WHERE password IS NULL AND status IS NULL;")
 
+var mysql = new QuryMysql('user').whereNot('status','=',3);
+test_value_should_be("Setect * whereNot", mysql.toSql, "SELECT * FROM user WHERE NOT status = 3;")
+
+var mysql = new QuryMysql('user').whereNot('status','=',3).whereNot('status','=',2);
+test_value_should_be("Setect * whereNot (2 condition)", mysql.toSql, "SELECT * FROM user WHERE NOT status = 3 AND NOT status = 2;")
+
 console.log("conclude:",clc.greenBright(true_score) ,"/", clc.redBright(false_score));
 console.log("\n",mysql.toSql);

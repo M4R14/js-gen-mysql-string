@@ -81,6 +81,20 @@ class QuryMysql{
     return this;
  }
 
+ whereNot(column_name, operator,value){
+    if(typeof value == "string")
+        value = "'"+ value +"'";
+    
+    this._where.push({
+        _type:"WHERE_NOT",
+        _unique_operator:"NOT",
+        _colum:column_name, 
+        _operator: operator,
+        _value:value
+    });
+    return this;
+ }
+
  whereIn(column_name, value = []){
     for (var index in value) {
         if(typeof value[index] == "string")
@@ -307,7 +321,11 @@ class QuryMysql{
                 case "WHERE_IN":
                     where_str = where_str + AND + condition._colum +" "+ condition._operator +" ("+ condition._value +")" ;
                     break;
-                
+
+                case "WHERE_NOT":
+                    where_str = where_str + AND + "NOT" + " " + condition._colum +" "+ condition._operator +" "+ condition._value;
+                    break;
+
                 default:
                     where_str = where_str + AND + condition._colum +" "+ condition._operator +" "+ condition._value;
                     break;
