@@ -4,7 +4,19 @@ class QuryMysql{
  constructor(tableNname){
     this._table = tableNname ;
     this._where = [];
+    this._join  = [];
     this._delete = false;
+ }
+
+ join(tableNname, column_left, operator, column_right){
+     this._join.push({
+             "type": "INNER_JOIN", 
+             "table": tableNname,
+             "operator": operator,
+             "column_left": column_left,
+             "column_right": column_right
+     });
+     return this;
  }
 
  delete(){
@@ -70,6 +82,46 @@ class QuryMysql{
  }
 
  get toSql(){
+    if(this._join.length > 0 && this._columns){
+        var join_data = this._join;
+        var join_str = '';
+        var counter = 1;
+        for(var index in join_data){
+            switch (join_data[index].type) {
+                case "INNER_JOIN":
+                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
+                    break;
+            }
+        }
+
+         var select_colum = '';
+         var counter = 1;
+         for(var index in this._columns){
+             if(counter == this._columns.length){
+                 select_colum = select_colum + this._columns[index];
+             }else{
+                select_colum = select_colum + this._columns[index] + ",";
+             }
+             counter++;
+         }
+        
+        return "SELECT "+ select_colum +" FROM "+ this._table + join_str + ";";
+    }
+
+    if(this._join.length > 0){
+        var join_data = this._join;
+        var join_str = '';
+        var counter = 1;
+        for(var index in join_data){
+            switch (join_data[index].type) {
+                case "INNER_JOIN":
+                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
+                    break;
+            }
+        }
+        return "SELECT * FROM "+ this._table + join_str + ";";
+    }
+
     if(this._delete == true){
         var where_str = '';
         var counter = 1;
@@ -147,7 +199,7 @@ class QuryMysql{
         for(var index in this._where){
             var condition = this._where[index];
             if(counter == 1){
-                where_str = where_str + "WHERE " + condition._colum +" "+ condition._operator +" "+ condition._value ;
+                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
             }else{
                 where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
             }
@@ -167,7 +219,7 @@ class QuryMysql{
              }
          }
 
-        return "SELECT "+ select_colum +" FROM "+ this._table +" "+ where_str +" ORDER BY "+ orderBy_columns +" "+ this._orderBy._type +";";          
+        return "SELECT "+ select_colum +" FROM "+ this._table +" WHERE "+ where_str +" ORDER BY "+ orderBy_columns +" "+ this._orderBy._type +";";          
      }
 
      if(this._columns && this._where.length > 0){
@@ -187,14 +239,14 @@ class QuryMysql{
         for(var index in this._where){
             var condition = this._where[index];
             if(counter == 1){
-                where_str = where_str + "WHERE " + condition._colum +" "+ condition._operator +" "+ condition._value ;
+                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
             }else{
                 where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
             }
             counter++;
         }
         
-        return "SELECT "+ select_colum +" FROM "+ this._table +" "+ where_str + ";";
+        return "SELECT "+ select_colum +" FROM "+ this._table +" WHERE "+ where_str + ";";
      }
 
      if(this._columns){
@@ -217,14 +269,14 @@ class QuryMysql{
         for(var index in this._where){
             var condition = this._where[index];
             if(counter == 1){
-                where_str = where_str + "WHERE " + condition._colum +" "+ condition._operator +" "+ condition._value ;
+                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
             }else{
                 where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
             }
             counter++;
         }
 
-        return "SELECT * FROM "+ this._table +" "+ where_str +";";
+        return "SELECT * FROM "+ this._table +" WHERE "+ where_str +";";
      }
 
      if(this._orderBy){

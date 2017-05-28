@@ -1,8 +1,17 @@
 var clc = require('cli-color');
 var {QuryMysql} = require('./js_gen_mysql');
 
+var true_score = 0;
+var false_score = 0;
 function test_value_should_be(title, value, should_be){
-    console.log(value == should_be ?  clc.greenBright('trun') : clc.redBright('false') ,":",title);
+    if(value == should_be){
+       var result = clc.greenBright('trun');
+       true_score++;
+    }else{
+       false_score++; 
+       var result = clc.redBright('false');
+    }
+    console.log( result,":",title);
 }
 
 // test
@@ -60,4 +69,15 @@ test_value_should_be("DELETE WHERE Data type String", mysql.toSql,"DELETE FROM u
 var mysql = new QuryMysql('users').where('user_id','=','UX100').where('status','=',100).delete();
 test_value_should_be("DELETE WHERE 2 condition Data type String and number", mysql.toSql,"DELETE FROM users WHERE user_id = 'UX100' AND status = 100;")
 
+var mysql = new QuryMysql('user').join('role','user.user_id','=','role.user_id');
+test_value_should_be("JOIN", mysql.toSql, "SELECT * FROM user JOIN role ON user.user_id = role.user_id;");
+
+var mysql = new QuryMysql('user').join('role','user.user_id','=','role.user_id').join('detail','user.user_id','=','detail.user_id');
+test_value_should_be("JOIN 3 tatle", mysql.toSql, 
+"SELECT * FROM user JOIN role ON user.user_id = role.user_id JOIN detail ON user.user_id = detail.user_id;");
+
+var mysql = new QuryMysql('user').select(['user.username','role.*']).join('role','user.user_id','=','role.user_id');
+test_value_should_be("JOIN AND SELECT COLUMN", mysql.toSql, "SELECT user.username,role.* FROM user JOIN role ON user.user_id = role.user_id;");
+
+console.log("conclude:",clc.greenBright(true_score) ,"/", clc.redBright(false_score));
 console.log("\n",mysql.toSql);
