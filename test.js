@@ -100,5 +100,8 @@ test_value_should_be("Setect * where or", mysql.toSql, "SELECT * FROM user WHERE
 var mysql = new QuryMysql('user').select(['A','B']).orderBy(['A']);
 test_value_should_be("Select columns order by ?", mysql.toSql, "SELECT A,B FROM user ORDER BY A ASC;");
 
+var mysql = new QuryMysql('user').join('role','user.user_id','=','role.user_id').orderBy(['user.user_id']);
+test_value_should_be("JOIN orderBy", mysql.toSql, "SELECT * FROM user JOIN role ON user.user_id = role.user_id ORDER BY user.user_id ASC;");
+
 console.log("conclude:",clc.greenBright(true_score) ,"/", clc.redBright(false_score));
 console.log("\n",mysql.toSql);

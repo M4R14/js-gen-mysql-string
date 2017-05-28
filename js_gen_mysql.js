@@ -196,6 +196,26 @@ class QuryMysql{
      return " WHERE " + where_str;
  }
 
+ get orderBy_str(){
+    var orderBy_str = '';
+     if(this._orderBy){
+         var columns = this._orderBy._columns;
+         
+         var colum_str = '';
+         var counter = 1;
+
+         for (var index in columns) {
+             if(counter == columns.length){
+                colum_str = colum_str + columns[index];
+             }else{
+                colum_str = colum_str + columns[index] +",";                
+             }
+         }
+         orderBy_str = " ORDER BY "+ colum_str +" "+ this._orderBy._type; 
+     }
+     return orderBy_str;
+ }
+
  get join_str(){
      var join_data = this._join;
         var join_str = '';
@@ -247,23 +267,7 @@ class QuryMysql{
         return "INSERT INTO "+this._table+" VALUES (" + data + ");"
      }
 
-     if(this._orderBy){
-         var columns = this._orderBy._columns;
-         
-         var colum_str = '';
-         var counter = 1;
-
-         for (var index in columns) {
-             if(counter == columns.length){
-                colum_str = colum_str + columns[index];
-             }else{
-                colum_str = colum_str + columns[index] +",";                
-             }
-         }
-        return "SELECT "+ this.select_column_str +" FROM "+ this._table + this.where_str +" ORDER BY "+ colum_str +" "+ this._orderBy._type +";"; 
-     }
-
-     return "SELECT "+this.select_column_str+" FROM "+ this._table + this.join_str + this.where_str +";";
+     return "SELECT "+this.select_column_str+" FROM "+ this._table + this.join_str + this.where_str + this.orderBy_str +";";
  }
 }
 
