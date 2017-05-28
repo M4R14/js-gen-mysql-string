@@ -24,11 +24,19 @@ class QuryMysql{
      return this;
  }
 
+ /**
+ * @param {array} data If column => '#column_name'
+ */
  update(data = {}){
     for (var key in data) {
         if (data.hasOwnProperty(key)) {
             if(typeof data[key] == "string")
-                data[key] = "'"+ data[key] +"'"; 
+                var isColumn = data[key].match('#');
+                if(isColumn){
+                   data[key] = data[key].replace('#', ''); 
+                }else{
+                   data[key] = "'"+ data[key] +"'";            
+                }
         }
     }
 
@@ -250,7 +258,7 @@ class QuryMysql{
             counter++;
         }
 
-        return "UPDATE "+ this._table +" SET "+ date_string + this.where_str +";"
+        return "UPDATE "+ this._table + this.join_str +" SET "+ date_string + this.where_str +";"
     }
 
      if(this._insert_data){

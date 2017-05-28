@@ -23,4 +23,4 @@ str.select(['username','password']).orderBy(['datetime']).where('id','=',8011);
 - [ ] DELETE && JOIN
 - [x] UPDATE
 - [x] UPDATE && WHERE 
-- [ ] UPDATE && JOIN
+- [x] UPDATE && JOIN
