@@ -17,6 +17,12 @@ str.select(['username','password']).orderBy(['datetime']).where('id','=',8011);
 - [x] SELECT && ORDER BY
 - [x] SELECT && JOIN
 - [ ] SELECT HAVING
+- [ ] LEFT JOIN
+- [ ] RIGHT JOIN
+- [ ] BETWEEN
+- [ ] FULL OUTER JOIN
+- [ ] GROUP BY
+- [ ] GROUP BY column_name(s)
 - [x] INSERT by Json
 - [x] DELETE
 - [x] DELETE && WHERE
