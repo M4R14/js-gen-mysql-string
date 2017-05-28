@@ -141,6 +141,9 @@ class QuryMysql{
  }
 
  get select_column_str(){
+    if(!this._columns)
+        return '*';
+
     var select_colum = '';
     var counter = 1;
     for(var index in this._columns){
@@ -155,6 +158,9 @@ class QuryMysql{
  }
 
  get where_str(){
+     if(this._where.length == 0)
+        return '';
+
       var where_str = '';
         var counter = 1;
         for(var index in this._where){
@@ -186,41 +192,27 @@ class QuryMysql{
             }
             counter++;
         }
-     return where_str;
+
+     return " WHERE " + where_str;
+ }
+
+ get join_str(){
+     var join_data = this._join;
+        var join_str = '';
+        var counter = 1;
+        for(var index in join_data){
+            switch (join_data[index].type) {
+                case "INNER_JOIN":
+                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
+                    break;
+            }
+        }
+    return join_str;
  }
 
  get toSql(){
-    if(this._join.length > 0 && this._columns){
-        var join_data = this._join;
-        var join_str = '';
-        var counter = 1;
-        for(var index in join_data){
-            switch (join_data[index].type) {
-                case "INNER_JOIN":
-                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
-                    break;
-            }
-        }
-        
-        return "SELECT "+ this.select_column_str +" FROM "+ this._table + join_str + ";";
-    }
-
-    if(this._join.length > 0){
-        var join_data = this._join;
-        var join_str = '';
-        var counter = 1;
-        for(var index in join_data){
-            switch (join_data[index].type) {
-                case "INNER_JOIN":
-                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
-                    break;
-            }
-        }
-        return "SELECT * FROM "+ this._table + join_str + ";";
-    }
-
     if(this._delete == true){
-        return "DELETE FROM "+ this._table +" WHERE "+ this.where_str +";";
+        return "DELETE FROM "+ this._table + this.where_str +";";
     }
 
     if(this._updata){
@@ -238,7 +230,7 @@ class QuryMysql{
             counter++;
         }
 
-        return "UPDATE "+ this._table +" SET "+ date_string +" WHERE "+ this.where_str +";"
+        return "UPDATE "+ this._table +" SET "+ date_string + this.where_str +";"
     }
 
      if(this._insert_data){
@@ -255,51 +247,6 @@ class QuryMysql{
         return "INSERT INTO "+this._table+" VALUES (" + data + ");"
      }
 
-     if(this._columns && this._where.length > 0 && this._orderBy){
-         var columns = this._orderBy._columns;
-         
-         var orderBy_columns = '';
-         var counter = 1;
-
-         for (var index in columns) {
-             if(counter == columns.length){
-                orderBy_columns = orderBy_columns + columns[index];
-             }else{
-                orderBy_columns = orderBy_columns + columns[index] +",";                
-             }
-         }
-
-        return "SELECT "+ this.select_column_str +" FROM "+ this._table +" WHERE "+ this.where_str +" ORDER BY "+ orderBy_columns +" "+ this._orderBy._type +";";          
-     }
-
-     if(this._columns && this._where.length > 0){
-        return "SELECT "+ this.select_column_str +" FROM "+ this._table +" WHERE "+ this.where_str + ";";
-     }
-
-     if(this._columns && this._orderBy){
-         var columns = this._orderBy._columns;
-         
-         var colum_str = '';
-         var counter = 1;
-
-         for (var index in columns) {
-             if(counter == columns.length){
-                colum_str = colum_str + columns[index];
-             }else{
-                colum_str = colum_str + columns[index] +",";                
-             }
-         }
-        return "SELECT "+ this.select_column_str +" FROM "+ this._table +" ORDER BY "+ colum_str +" "+ this._orderBy._type +";"; 
-     }
-
-     if(this._columns){
-         return "SELECT "+ this.select_column_str +" FROM "+ this._table +";";
-     }
-
-     if(this._where.length > 0){
-        return "SELECT * FROM "+ this._table +" WHERE "+ this.where_str +";";
-     }
-
      if(this._orderBy){
          var columns = this._orderBy._columns;
          
@@ -313,13 +260,11 @@ class QuryMysql{
                 colum_str = colum_str + columns[index] +",";                
              }
          }
-        return "SELECT * FROM "+ this._table +" ORDER BY "+ colum_str +" "+ this._orderBy._type +";"; 
+        return "SELECT "+ this.select_column_str +" FROM "+ this._table + this.where_str +" ORDER BY "+ colum_str +" "+ this._orderBy._type +";"; 
      }
 
-     return "SELECT * FROM "+ this._table +";";
+     return "SELECT "+this.select_column_str+" FROM "+ this._table + this.join_str + this.where_str +";";
  }
 }
-
-
 
 exports.QuryMysql = QuryMysql;
