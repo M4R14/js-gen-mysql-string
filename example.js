@@ -1,4 +1,4 @@
-var {QuryMysql} = require('./js_gen_mysql');
+var {QuryMysql} = require('./qury-mysql');
 var clc = require('cli-color');
 
 var str = new QuryMysql('user');
