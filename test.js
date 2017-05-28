@@ -1,5 +1,5 @@
 var clc = require('cli-color');
-var {QuryMysql} = require('./js_gen_mysql');
+var {QuryMysql} = require('./qury-mysql');
 
 var true_score = 0;
 var false_score = 0;
