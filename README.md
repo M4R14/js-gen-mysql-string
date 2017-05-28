@@ -1,28 +1,28 @@
 ## Example
-### strart
+strart
 ```js
 var {QuryMysql} = require('./js_gen_mysql');
 ```
 
-### SELECT
+SELECT
 ```js
 var str = select(['username','password']).orderBy(['datetime']).where('id','=',8011);
 // SELECT username,password FROM user WHERE id = 8011 ORDER BY datetime ASC;
 ```
 
-### INSERT
+INSERT
 ```js
 var mysql = new QuryMysql('table_name').insert(['value1', 'value2', 'value3']);
 // INSERT INTO table_name VALUES ('value1','value2','value3');
 ```
 
-### UPDATE
+UPDATE
 ```js
 var mysql = new QuryMysql('table_name').insert(['value1', 'value2', 'value3']);
 // INSERT INTO table_name VALUES ('value1','value2','value3');
 ```
 
-### DELETE
+DELETE
 ```js
 var mysql = new QuryMysql('users').where('user_id','=',100).delete();
 // DELETE FROM users WHERE user_id = 100;
