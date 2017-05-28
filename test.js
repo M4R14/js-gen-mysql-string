@@ -79,5 +79,8 @@ test_value_should_be("JOIN 3 tatle", mysql.toSql,
 var mysql = new QuryMysql('user').select(['user.username','role.*']).join('role','user.user_id','=','role.user_id');
 test_value_should_be("JOIN AND SELECT COLUMN", mysql.toSql, "SELECT user.username,role.* FROM user JOIN role ON user.user_id = role.user_id;");
 
+var mysql = new QuryMysql('user').whereIn('status',['1','2',3]);
+test_value_should_be("Setect WhereIn", mysql.toSql, "SELECT * FROM user WHERE status IN ('1','2',3);")
+
 console.log("conclude:",clc.greenBright(true_score) ,"/", clc.redBright(false_score));
 console.log("\n",mysql.toSql);

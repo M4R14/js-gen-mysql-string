@@ -62,7 +62,28 @@ class QuryMysql{
     if(typeof value == "string")
         value = "'"+ value +"'";
 
-    this._where.push({_colum:colum, _operator:operator, _value:value});
+    this._where.push({
+        _type:"DEFAULT",
+        _colum:colum, 
+        _operator:operator, 
+        _value:value
+    });
+    return this;
+ }
+
+ whereIn(column_name, value = []){
+    for (var index in value) {
+        if(typeof value[index] == "string")
+            value[index] = "'"+ value[index] +"'";
+    }
+
+    this._where.push({
+        _type:"WHERE_IN",
+        _colum:column_name, 
+        _operator:"IN", 
+        _value:value
+    });
+
     return this;
  }
 
@@ -268,10 +289,18 @@ class QuryMysql{
         var counter = 1;
         for(var index in this._where){
             var condition = this._where[index];
-            if(counter == 1){
-                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
-            }else{
-                where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
+            var AND = " AND ";
+            if(counter == 1)
+                AND = "";
+
+            switch (condition._type) {
+                case "WHERE_IN":
+                    where_str = where_str + AND + condition._colum +" "+ condition._operator +" ("+ condition._value +")" ;
+                    break;
+                
+                default:
+                    where_str = where_str + AND + condition._colum +" "+ condition._operator +" "+ condition._value;
+                    break;
             }
             counter++;
         }
