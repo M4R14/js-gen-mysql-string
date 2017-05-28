@@ -18,8 +18,8 @@ var mysql = new QuryMysql('table_name').insert(['value1', 'value2', 'value3']);
 
 UPDATE
 ```js
-var mysql = new QuryMysql('table_name').insert(['value1', 'value2', 'value3']);
-// INSERT INTO table_name VALUES ('value1','value2','value3');
+var mysql = new QuryMysql('users').update({username:'mark', password:'000000'}).where('user_id','=',100);
+// UPDATE users SET username = 'mark', password = '000000' WHERE user_id = 100;
 ```
 
 DELETE
