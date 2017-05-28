@@ -95,6 +95,20 @@ class QuryMysql{
     return this;
  }
 
+ orWhere(column_name, operator,value){
+     if(typeof value == "string")
+        value = "'"+ value +"'";
+    
+    this._where.push({
+        _type:"OR_WHERE",
+        _unique_operator:"OR",
+        _colum:column_name, 
+        _operator: operator,
+        _value:value
+    });
+    return this;
+ }
+
  whereIn(column_name, value = []){
     for (var index in value) {
         if(typeof value[index] == "string")
@@ -324,6 +338,14 @@ class QuryMysql{
 
                 case "WHERE_NOT":
                     where_str = where_str + AND + "NOT" + " " + condition._colum +" "+ condition._operator +" "+ condition._value;
+                    break;
+
+                case "OR_WHERE":
+                    var OR = " OR ";
+                    if(counter == 1)
+                        OR = "";
+                        
+                    where_str = where_str + OR + condition._colum +" "+ condition._operator +" "+ condition._value;
                     break;
 
                 default:

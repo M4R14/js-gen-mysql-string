@@ -94,5 +94,9 @@ test_value_should_be("Setect * whereNot", mysql.toSql, "SELECT * FROM user WHERE
 var mysql = new QuryMysql('user').whereNot('status','=',3).whereNot('status','=',2);
 test_value_should_be("Setect * whereNot (2 condition)", mysql.toSql, "SELECT * FROM user WHERE NOT status = 3 AND NOT status = 2;")
 
+var mysql = new QuryMysql('user').where('status', '=',3).orWhere('status', '=',1);
+test_value_should_be("Setect * where or", mysql.toSql, "SELECT * FROM user WHERE status = 3 OR status = 1;")
+
+
 console.log("conclude:",clc.greenBright(true_score) ,"/", clc.redBright(false_score));
 console.log("\n",mysql.toSql);
