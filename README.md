@@ -6,7 +6,7 @@ var {QuryMysql} = require('./js_gen_mysql');
 
 SELECT
 ```js
-var str = select(['username','password']).orderBy(['datetime']).where('id','=',8011);
+var str = new QuryMysql('users').select(['username','password']).orderBy(['datetime']).where('id','=',8011);
 // SELECT username,password FROM user WHERE id = 8011 ORDER BY datetime ASC;
 ```
 
