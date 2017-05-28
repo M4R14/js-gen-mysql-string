@@ -71,6 +71,16 @@ class QuryMysql{
     return this;
  }
 
+ whereNull(column_name){
+    this._where.push({
+        _type:"WHERE_NULL",
+        _colum:column_name, 
+        _operator:"IS", 
+        _value:"NULL"
+    });
+    return this;
+ }
+
  whereIn(column_name, value = []){
     for (var index in value) {
         if(typeof value[index] == "string")

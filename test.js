@@ -80,7 +80,13 @@ var mysql = new QuryMysql('user').select(['user.username','role.*']).join('role'
 test_value_should_be("JOIN AND SELECT COLUMN", mysql.toSql, "SELECT user.username,role.* FROM user JOIN role ON user.user_id = role.user_id;");
 
 var mysql = new QuryMysql('user').whereIn('status',['1','2',3]);
-test_value_should_be("Setect WhereIn", mysql.toSql, "SELECT * FROM user WHERE status IN ('1','2',3);")
+test_value_should_be("Setect * WhereIn", mysql.toSql, "SELECT * FROM user WHERE status IN ('1','2',3);")
+
+var mysql = new QuryMysql('user').whereNull('password');
+test_value_should_be("Setect * Where is Null", mysql.toSql, "SELECT * FROM user WHERE password IS NULL;")
+
+var mysql = new QuryMysql('user').whereNull('password').whereNull('status').select(['user_id','username']);
+test_value_should_be("Setect columns Where is Null (2 condition)", mysql.toSql, "SELECT user_id,username FROM user WHERE password IS NULL AND status IS NULL;")
 
 console.log("conclude:",clc.greenBright(true_score) ,"/", clc.redBright(false_score));
 console.log("\n",mysql.toSql);
