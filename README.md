@@ -1,7 +1,7 @@
 ## Example
 strart
 ```js
-var {QuryMysql} = require('./js_gen_mysql');
+var {QuryMysql} = require('./qury-mysql');
 ```
 
 SELECT
