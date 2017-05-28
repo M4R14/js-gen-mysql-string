@@ -97,6 +97,8 @@ test_value_should_be("Setect * whereNot (2 condition)", mysql.toSql, "SELECT * F
 var mysql = new QuryMysql('user').where('status', '=',3).orWhere('status', '=',1);
 test_value_should_be("Setect * where or", mysql.toSql, "SELECT * FROM user WHERE status = 3 OR status = 1;")
 
+var mysql = new QuryMysql('user').select(['A','B']).orderBy(['A']);
+test_value_should_be("Select columns order by ?", mysql.toSql, "SELECT A,B FROM user ORDER BY A ASC;");
 
 console.log("conclude:",clc.greenBright(true_score) ,"/", clc.redBright(false_score));
 console.log("\n",mysql.toSql);

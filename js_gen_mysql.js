@@ -140,190 +140,22 @@ class QuryMysql{
     return this;
  }
 
- get toSql(){
-    if(this._join.length > 0 && this._columns){
-        var join_data = this._join;
-        var join_str = '';
-        var counter = 1;
-        for(var index in join_data){
-            switch (join_data[index].type) {
-                case "INNER_JOIN":
-                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
-                    break;
-            }
+ get select_column_str(){
+    var select_colum = '';
+    var counter = 1;
+    for(var index in this._columns){
+        if(counter == this._columns.length){
+            select_colum = select_colum + this._columns[index];
+        }else{
+            select_colum = select_colum + this._columns[index] + ",";
         }
-
-         var select_colum = '';
-         var counter = 1;
-         for(var index in this._columns){
-             if(counter == this._columns.length){
-                 select_colum = select_colum + this._columns[index];
-             }else{
-                select_colum = select_colum + this._columns[index] + ",";
-             }
-             counter++;
-         }
-        
-        return "SELECT "+ select_colum +" FROM "+ this._table + join_str + ";";
+        counter++;
     }
+    return select_colum;
+ }
 
-    if(this._join.length > 0){
-        var join_data = this._join;
-        var join_str = '';
-        var counter = 1;
-        for(var index in join_data){
-            switch (join_data[index].type) {
-                case "INNER_JOIN":
-                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
-                    break;
-            }
-        }
-        return "SELECT * FROM "+ this._table + join_str + ";";
-    }
-
-    if(this._delete == true){
-        var where_str = '';
-        var counter = 1;
-        for(var index in this._where){
-            var condition = this._where[index];
-            if(counter == 1){
-                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
-            }else{
-                where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
-            }
-            counter++;
-        }
-
-        return "DELETE FROM "+ this._table +" WHERE "+ where_str +";";
-    }
-
-    if(this._updata){
-        var data_for_update = this._updata;
-        var date_string = '';
-        var counter = 1;
-        for (var key in data_for_update) {
-            if (data_for_update.hasOwnProperty(key)) {
-                if(counter == Object.keys(data_for_update).length){
-                    date_string +=  key +" = "+ data_for_update[key];
-                }else{
-                    date_string +=  key +" = "+ data_for_update[key] + ", ";
-                }
-            }
-            counter++;
-        }
-
-        var where_str = '';
-        var counter = 1;
-        for(var index in this._where){
-            var condition = this._where[index];
-            if(counter == 1){
-                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
-            }else{
-                where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
-            }
-            counter++;
-        }
-
-        return "UPDATE "+ this._table +" SET "+ date_string +" WHERE "+ where_str +";"
-    }
-
-     if(this._insert_data){
-        var insert_data = this._insert_data;
-        var data = '';
-        var counter = 1;
-        for (var index in insert_data) {
-            if(index == insert_data.length -1){
-                data = data + insert_data[index];
-            }else{
-                data = data + insert_data[index] + ',';
-            }
-        }
-        return "INSERT INTO "+this._table+" VALUES (" + data + ");"
-     }
-
-     if(this._columns && this._where.length > 0 && this._orderBy){
-        var select_colum = '';
-         var counter = 1;
-         for(var index in this._columns){
-             if(counter == this._columns.length){
-                 select_colum = select_colum + this._columns[index];
-             }else{
-                select_colum = select_colum + this._columns[index] + ",";
-             }
-             counter++;
-         }
-
-        var where_str = '';
-        var counter = 1;
-        for(var index in this._where){
-            var condition = this._where[index];
-            if(counter == 1){
-                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
-            }else{
-                where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
-            }
-            counter++;
-        }
-
-         var columns = this._orderBy._columns;
-         
-         var orderBy_columns = '';
-         var counter = 1;
-
-         for (var index in columns) {
-             if(counter == columns.length){
-                orderBy_columns = orderBy_columns + columns[index];
-             }else{
-                orderBy_columns = orderBy_columns + columns[index] +",";                
-             }
-         }
-
-        return "SELECT "+ select_colum +" FROM "+ this._table +" WHERE "+ where_str +" ORDER BY "+ orderBy_columns +" "+ this._orderBy._type +";";          
-     }
-
-     if(this._columns && this._where.length > 0){
-         var select_colum = '';
-         var counter = 1;
-         for(var index in this._columns){
-             if(counter == this._columns.length){
-                 select_colum = select_colum + this._columns[index];
-             }else{
-                select_colum = select_colum + this._columns[index] + ",";
-             }
-             counter++;
-         }
-
-        var where_str = '';
-        var counter = 1;
-        for(var index in this._where){
-            var condition = this._where[index];
-            if(counter == 1){
-                where_str = where_str + condition._colum +" "+ condition._operator +" "+ condition._value ;
-            }else{
-                where_str = where_str + " AND " + condition._colum +" "+ condition._operator +" "+ condition._value ;                
-            }
-            counter++;
-        }
-        
-        return "SELECT "+ select_colum +" FROM "+ this._table +" WHERE "+ where_str + ";";
-     }
-
-     if(this._columns){
-         var select_colum = '';
-         var counter = 1;
-         for(var index in this._columns){
-             if(counter == this._columns.length){
-                 select_colum = select_colum + this._columns[index];
-             }else{
-                select_colum = select_colum + this._columns[index] + ",";
-             }
-             counter++;
-         }
-         return "SELECT "+ select_colum +" FROM "+ this._table +";";
-     }
-
-     if(this._where.length > 0){
-        var where_str = '';
+ get where_str(){
+      var where_str = '';
         var counter = 1;
         for(var index in this._where){
             var condition = this._where[index];
@@ -344,7 +176,7 @@ class QuryMysql{
                     var OR = " OR ";
                     if(counter == 1)
                         OR = "";
-                        
+
                     where_str = where_str + OR + condition._colum +" "+ condition._operator +" "+ condition._value;
                     break;
 
@@ -354,8 +186,118 @@ class QuryMysql{
             }
             counter++;
         }
+     return where_str;
+ }
 
-        return "SELECT * FROM "+ this._table +" WHERE "+ where_str +";";
+ get toSql(){
+    if(this._join.length > 0 && this._columns){
+        var join_data = this._join;
+        var join_str = '';
+        var counter = 1;
+        for(var index in join_data){
+            switch (join_data[index].type) {
+                case "INNER_JOIN":
+                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
+                    break;
+            }
+        }
+        
+        return "SELECT "+ this.select_column_str +" FROM "+ this._table + join_str + ";";
+    }
+
+    if(this._join.length > 0){
+        var join_data = this._join;
+        var join_str = '';
+        var counter = 1;
+        for(var index in join_data){
+            switch (join_data[index].type) {
+                case "INNER_JOIN":
+                    join_str += " JOIN "+ join_data[index].table +" ON "+ join_data[index].column_left + " " + join_data[index].operator + " " + join_data[index].column_right;  
+                    break;
+            }
+        }
+        return "SELECT * FROM "+ this._table + join_str + ";";
+    }
+
+    if(this._delete == true){
+        return "DELETE FROM "+ this._table +" WHERE "+ this.where_str +";";
+    }
+
+    if(this._updata){
+        var data_for_update = this._updata;
+        var date_string = '';
+        var counter = 1;
+        for (var key in data_for_update) {
+            if (data_for_update.hasOwnProperty(key)) {
+                if(counter == Object.keys(data_for_update).length){
+                    date_string +=  key +" = "+ data_for_update[key];
+                }else{
+                    date_string +=  key +" = "+ data_for_update[key] + ", ";
+                }
+            }
+            counter++;
+        }
+
+        return "UPDATE "+ this._table +" SET "+ date_string +" WHERE "+ this.where_str +";"
+    }
+
+     if(this._insert_data){
+        var insert_data = this._insert_data;
+        var data = '';
+        var counter = 1;
+        for (var index in insert_data) {
+            if(index == insert_data.length -1){
+                data = data + insert_data[index];
+            }else{
+                data = data + insert_data[index] + ',';
+            }
+        }
+        return "INSERT INTO "+this._table+" VALUES (" + data + ");"
+     }
+
+     if(this._columns && this._where.length > 0 && this._orderBy){
+         var columns = this._orderBy._columns;
+         
+         var orderBy_columns = '';
+         var counter = 1;
+
+         for (var index in columns) {
+             if(counter == columns.length){
+                orderBy_columns = orderBy_columns + columns[index];
+             }else{
+                orderBy_columns = orderBy_columns + columns[index] +",";                
+             }
+         }
+
+        return "SELECT "+ this.select_column_str +" FROM "+ this._table +" WHERE "+ this.where_str +" ORDER BY "+ orderBy_columns +" "+ this._orderBy._type +";";          
+     }
+
+     if(this._columns && this._where.length > 0){
+        return "SELECT "+ this.select_column_str +" FROM "+ this._table +" WHERE "+ this.where_str + ";";
+     }
+
+     if(this._columns && this._orderBy){
+         var columns = this._orderBy._columns;
+         
+         var colum_str = '';
+         var counter = 1;
+
+         for (var index in columns) {
+             if(counter == columns.length){
+                colum_str = colum_str + columns[index];
+             }else{
+                colum_str = colum_str + columns[index] +",";                
+             }
+         }
+        return "SELECT "+ this.select_column_str +" FROM "+ this._table +" ORDER BY "+ colum_str +" "+ this._orderBy._type +";"; 
+     }
+
+     if(this._columns){
+         return "SELECT "+ this.select_column_str +" FROM "+ this._table +";";
+     }
+
+     if(this._where.length > 0){
+        return "SELECT * FROM "+ this._table +" WHERE "+ this.where_str +";";
      }
 
      if(this._orderBy){
